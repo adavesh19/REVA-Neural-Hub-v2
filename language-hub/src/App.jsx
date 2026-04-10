@@ -56,15 +56,15 @@ function App() {
     try {
       const response = await fetch(`${API_BASE_URL}/translate?target_lang=${targetLang}&source_lang=${sourceLang}&text=${encodeURIComponent(inputText)}`);
       const data = await response.json();
-      
+
       if (!response.ok) throw new Error(data.detail || 'Translation failed');
-      
+
       setResult(data);
       saveToHistory(inputText, data.translated[0], data.source_lang, targetLang);
     } catch (err) {
       setError(err.message);
     } finally {
-      setTimeout(() => setLoading(false), 500); 
+      setTimeout(() => setLoading(false), 500);
     }
   };
 
@@ -80,7 +80,7 @@ function App() {
       const data = await response.json();
 
       if (!response.ok) throw new Error(data.detail || 'Detection failed');
-      
+
       const langName = LANGUAGES.find(l => l.code === data)?.name || data.toUpperCase();
       setIdResult({ code: data, name: langName });
       setTimeout(() => setIsFlipped(true), 800);
@@ -122,7 +122,7 @@ function App() {
   return (
     <div className="hub-container">
       {toast && <div className="toast">{toast}</div>}
-      
+
       <header className="hub-header">
         <h1>REVA <span className="blue-gradient">Neural Hub v2</span></h1>
         <div className="tab-switcher">
@@ -146,8 +146,8 @@ function App() {
                   {LANGUAGES.map(lang => <option key={lang.code} value={lang.code}>{lang.name}</option>)}
                 </select>
               </div>
-              <textarea 
-                placeholder="Enter text to translate..." 
+              <textarea
+                placeholder="Enter text to translate..."
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
               />
@@ -169,7 +169,7 @@ function App() {
                 </div>
               </div>
               <div className="translation-box">
-                {loading ? <div className="loader">Analyzing Neural Patterns...</div> : 
+                {loading ? <div className="loader">Analyzing Neural Patterns...</div> :
                   <p>{result?.translated?.[0] || 'Translation result will appear here...'}</p>}
               </div>
               {result && <div className="detected-hint">Detected: <span className="blue-gradient">{result.source_lang?.toUpperCase()}</span></div>}
@@ -181,15 +181,15 @@ function App() {
               <div className="section-header">
                 <h3>Neural Input</h3>
               </div>
-              <textarea 
-                placeholder="Enter text to scan for language patterns..." 
+              <textarea
+                placeholder="Enter text to scan for language patterns..."
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
               />
-              <div className="button-group-footer" style={{background: 'transparent', padding: '20px 0', borderTop: 'none'}}>
-                <button 
-                  className="main-action-btn" 
-                  onClick={handleIdentify} 
+              <div className="button-group-footer" style={{ background: 'transparent', padding: '20px 0', borderTop: 'none' }}>
+                <button
+                  className="main-action-btn"
+                  onClick={handleIdentify}
                   disabled={loading}
                 >
                   {loading ? 'ANALYZING PATTERNS...' : 'IDENTIFY LANGUAGE'}
@@ -202,20 +202,20 @@ function App() {
               <div className="section-header">
                 <h3>Neural Result</h3>
               </div>
-              <div className={`flip-card ${isFlipped ? 'flipped' : ''} ${idResult ? 'visible' : ''}`} style={{height: '100%', marginTop: '0'}}>
+              <div className={`flip-card ${isFlipped ? 'flipped' : ''} ${idResult ? 'visible' : ''}`} style={{ height: '100%', marginTop: '0' }}>
                 <div className="flip-card-inner">
-                  <div className="flip-card-front" style={{background: 'rgba(255,255,255,0.02)'}}>
-                    <p style={{opacity: 0.5}}>{loading ? 'Neural Scan in Progress...' : 'Waiting for Input...'}</p>
+                  <div className="flip-card-front" style={{ background: 'rgba(255,255,255,0.02)' }}>
+                    <p style={{ opacity: 0.5 }}>{loading ? 'Neural Scan in Progress...' : 'Waiting for Input...'}</p>
                   </div>
                   <div className="flip-card-back">
                     <h4>Classification Result</h4>
                     <div className="lang-name blue-gradient">{idResult?.name}</div>
                     <div className="confidence-score">Confidence Meta: 99.9%</div>
-                    
+
                     {idResult && (
-                      <button 
-                        className="secondary-btn" 
-                        style={{marginTop: '30px', padding: '10px 25px'}}
+                      <button
+                        className="secondary-btn"
+                        style={{ marginTop: '30px', padding: '10px 25px' }}
                         onClick={() => {
                           setTargetLang('hi'); // Default to Hindi or keep current
                           setActiveTab('translator');
@@ -232,7 +232,7 @@ function App() {
         )}
 
         {activeTab === 'translator' && (
-          <div className="button-group-footer glass-panel" style={{marginTop: '30px', borderRadius: '30px'}}>
+          <div className="button-group-footer glass-panel" style={{ marginTop: '30px', borderRadius: '30px' }}>
             <button className="secondary-btn" onClick={handleReset}>RESET</button>
             <button className="main-action-btn" onClick={handleTranslate} disabled={loading}>
               {loading ? 'PROCESSING...' : 'TRANSLATE NOW'}
@@ -247,7 +247,7 @@ function App() {
               {history.map(item => (
                 <div key={item.id} className="history-item">
                   <span>{item.input.substring(0, 30)}... → {item.translated.substring(0, 30)}...</span>
-                  <button className="secondary-btn" style={{padding: '5px 15px', fontSize: '0.8rem'}} onClick={() => setInputText(item.input)}>Reuse</button>
+                  <button className="secondary-btn" style={{ padding: '5px 15px', fontSize: '0.8rem' }} onClick={() => setInputText(item.input)}>Reuse</button>
                 </div>
               ))}
             </div>
@@ -255,7 +255,7 @@ function App() {
         )}
       </main>
 
-      <footer className="hub-footer" style={{marginTop: '50px', opacity: 0.5}}>
+      <footer className="hub-footer" style={{ marginTop: '50px', opacity: 0.5 }}>
         <p>REVA UNIVERSITY | DEPARTMENT OF AIML</p>
       </footer>
     </div>

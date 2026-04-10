@@ -1,4 +1,5 @@
 {
+  "installCommand": "npm install --prefix language-hub",
   "buildCommand": "npm run build --prefix language-hub",
   "outputDirectory": "language-hub/dist"
 }
