@@ -1,2 +1,9 @@
-easynmt
-http3
+fastapi
+uvicorn
+googletrans==3.1.0a0
+deep-translator
+langid
+joblib
+python-multipart
+pydantic
+langdetect

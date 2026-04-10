@@ -14,6 +14,8 @@ const LANGUAGES = [
   { code: 'de', name: 'German' },
 ];
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:24081";
+
 function App() {
   const [activeTab, setActiveTab] = useState('translator');
   const [inputText, setInputText] = useState('');
@@ -52,7 +54,7 @@ function App() {
     setResult(null);
 
     try {
-      const response = await fetch(`http://localhost:24081/translate?target_lang=${targetLang}&source_lang=${sourceLang}&text=${encodeURIComponent(inputText)}`);
+      const response = await fetch(`${API_BASE_URL}/translate?target_lang=${targetLang}&source_lang=${sourceLang}&text=${encodeURIComponent(inputText)}`);
       const data = await response.json();
       
       if (!response.ok) throw new Error(data.detail || 'Translation failed');
@@ -74,7 +76,7 @@ function App() {
     setIsFlipped(false);
 
     try {
-      const response = await fetch(`http://localhost:24081/language_detection?text=${encodeURIComponent(inputText)}`);
+      const response = await fetch(`${API_BASE_URL}/language_detection?text=${encodeURIComponent(inputText)}`);
       const data = await response.json();
 
       if (!response.ok) throw new Error(data.detail || 'Detection failed');
