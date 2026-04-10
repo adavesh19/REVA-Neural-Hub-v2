@@ -112,23 +112,28 @@ body {
   border-color: rgba(255, 255, 255, 0.15);
 }
 
-/* Translator Grid */
-.translator-grid {
+/* Unified Grid System */
+.translator-grid, .identifier-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   width: 100%;
   max-width: 1200px;
   overflow: hidden;
+  position: relative;
 }
 
-.input-section, .output-section {
+.identifier-grid {
+  min-height: 450px;
+}
+
+.input-section, .output-section, .scan-input-section, .scan-result-section {
   padding: 40px;
   display: flex;
   flex-direction: column;
   min-height: 400px;
 }
 
-.input-section {
+.input-section, .scan-input-section {
   border-right: 1px solid var(--glass-border);
 }
 

@@ -174,32 +174,55 @@ function App() {
             </div>
           </div>
         ) : (
-          <div className="identifier-container">
-            <div className={`glass-panel scan-box ${loading ? 'loading' : ''}`}>
-              <div className="laser"></div>
-              <h3>Neural identification</h3>
+          <div className="glass-panel identifier-grid">
+            <div className="scan-input-section">
+              <div className="section-header">
+                <h3>Neural Input</h3>
+              </div>
               <textarea 
                 placeholder="Enter text to scan for language patterns..." 
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
               />
-              <button 
-                className="main-action-btn" 
-                style={{marginTop: '20px', width: '100%'}} 
-                onClick={handleIdentify} 
-                disabled={loading}
-              >
-                {loading ? 'ANALYZING PATTERNS...' : 'IDENTIFY LANGUAGE'}
-              </button>
+              <div className="button-group-footer" style={{background: 'transparent', padding: '20px 0', borderTop: 'none'}}>
+                <button 
+                  className="main-action-btn" 
+                  onClick={handleIdentify} 
+                  disabled={loading}
+                >
+                  {loading ? 'ANALYZING PATTERNS...' : 'IDENTIFY LANGUAGE'}
+                </button>
+              </div>
+              {loading && <div className="laser"></div>}
             </div>
 
-            <div className={`flip-card ${isFlipped ? 'flipped' : ''} ${idResult ? 'visible' : ''}`}>
-              <div className="flip-card-inner">
-                <div className="flip-card-front"><p>Scanning...</p></div>
-                <div className="flip-card-back">
-                  <h4>Neural Scan Result</h4>
-                  <div className="lang-name blue-gradient">{idResult?.name}</div>
-                  <div className="confidence-score">Confidence Meta: 99.8%</div>
+            <div className="scan-result-section">
+              <div className="section-header">
+                <h3>Neural Result</h3>
+              </div>
+              <div className={`flip-card ${isFlipped ? 'flipped' : ''} ${idResult ? 'visible' : ''}`} style={{height: '100%', marginTop: '0'}}>
+                <div className="flip-card-inner">
+                  <div className="flip-card-front" style={{background: 'rgba(255,255,255,0.02)'}}>
+                    <p style={{opacity: 0.5}}>{loading ? 'Neural Scan in Progress...' : 'Waiting for Input...'}</p>
+                  </div>
+                  <div className="flip-card-back">
+                    <h4>Classification Result</h4>
+                    <div className="lang-name blue-gradient">{idResult?.name}</div>
+                    <div className="confidence-score">Confidence Meta: 99.9%</div>
+                    
+                    {idResult && (
+                      <button 
+                        className="secondary-btn" 
+                        style={{marginTop: '30px', padding: '10px 25px'}}
+                        onClick={() => {
+                          setTargetLang('hi'); // Default to Hindi or keep current
+                          setActiveTab('translator');
+                        }}
+                      >
+                        Translate This Text ⇄
+                      </button>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>

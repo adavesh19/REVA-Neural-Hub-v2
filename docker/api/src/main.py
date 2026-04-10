@@ -36,7 +36,8 @@ class TranslationRequest(BaseModel):
 def detect_language_custom(text: str):
     if LID_MODEL and LID_VECTORIZER:
         try:
-            vec = LID_VECTORIZER.transform([text])
+            # Predict using lowercase to match training
+            vec = LID_VECTORIZER.transform([text.lower()])
             prediction = LID_MODEL.predict(vec)[0]
             return prediction
         except Exception as e:

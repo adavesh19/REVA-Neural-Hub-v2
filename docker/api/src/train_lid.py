@@ -62,6 +62,7 @@ df = pd.DataFrame(data, columns=['text', 'lang'])
 
 # Vectorization: Character 2-4 grams
 print("Starting Vectorization...")
+df['text'] = df['text'].str.lower()  # Force Case-Insensitive
 vectorizer = TfidfVectorizer(analyzer='char', ngram_range=(2, 4))
 X = vectorizer.fit_transform(df['text'])
 y = df['lang']
