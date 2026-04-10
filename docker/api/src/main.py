@@ -69,7 +69,7 @@ def detect_language_custom(text: str):
         detected, confidence = langid.classify(text)
         print(f"LID [Tier 3 - Langid]: '{text}' -> {detected}")
         return detected
-    exceptException as e:
+    except Exception as e:
         print(f"LID Tier 3 Error: {e}")
 
     # Final Fallback
