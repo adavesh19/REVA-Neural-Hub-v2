@@ -2,14 +2,12 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Optional, Union, List
-import joblib
 import langid
 import time
 import traceback
+import requests
 from deep_translator import GoogleTranslator
 from langdetect import detect as lang_detect
-
-import requests
 
 app = FastAPI()
 
@@ -53,12 +51,10 @@ def detect_language_custom(text: str):
         print(f"LID [Tier 1 - Dictionary]: '{text}' -> {detected}")
         return detected
 
-import requests
-
-# TIER 2: Official Google Detection API (The Gold Standard)
+    # TIER 2: Official Google Detection API (The Gold Standard)
     try:
         url = f"https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=en&dt=t&q={requests.utils.quote(text)}"
-        r = requests.get(url, timeout=5)
+        r = requests.get(url, timeout=3)
         if r.status_code == 200:
             detected = r.json()[2]
             print(f"LID [Tier 2 - Google API]: '{text}' -> {detected}")
@@ -101,7 +97,7 @@ async def translate(text: str, target_lang: str, source_lang: Optional[str] = "a
         }
     except Exception as e:
         traceback.print_exc()
-        raise HTTPException(403, detail="Error: " + str(e))
+        raise HTTPException(400, detail="Error: " + str(e))
 
 @app.post("/translate")
 async def translate_post(request: TranslationRequest):
@@ -112,7 +108,6 @@ async def translate_post(request: TranslationRequest):
         
         if src == "auto":
             if isinstance(request.text, list):
-                # Using the first element for detection if auto
                 detected = detect_language_custom(request.text[0]) if request.text else "en"
             else:
                 detected = detect_language_custom(request.text)
@@ -131,7 +126,7 @@ async def translate_post(request: TranslationRequest):
         }
     except Exception as e:
         traceback.print_exc()
-        raise HTTPException(403, detail="Error: " + str(e))
+        raise HTTPException(400, detail="Error: " + str(e))
 
 @app.get("/language_detection")
 async def language_detection(text: str):
