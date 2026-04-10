@@ -113,10 +113,11 @@ body {
 }
 
 .input-section, .output-section, .scan-input-section, .scan-result-section {
-  padding: 50px;
+  padding: 40px;
   display: flex;
   flex-direction: column;
-  min-height: 450px;
+  min-height: 480px; /* Slightly taller for better spacing */
+  transition: all 0.3s ease;
 }
 
 .input-section, .scan-input-section {
@@ -131,13 +132,12 @@ body {
   border: 1px solid var(--glass-border);
   border-radius: 40px;
   box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
-  overflow: hidden;
-  transition: 0.5s;
+  position: relative;
+  margin-top: 20px;
 }
 
 .glass-panel:hover {
-  border-color: rgba(0, 210, 255, 0.3);
-  box-shadow: 0 30px 80px rgba(0, 210, 255, 0.08);
+  border-color: rgba(0, 210, 255, 0.2);
 }
 
 /* Inputs & Labels */
@@ -162,6 +162,18 @@ textarea {
   line-height: 1.6;
 }
 
+.translation-box {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.translation-box p {
+  font-size: 1.4rem;
+  line-height: 1.5;
+  color: var(--electric-blue);
+}
 .lang-select {
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid var(--glass-border);
@@ -173,25 +185,44 @@ textarea {
   outline: none;
 }
 
-/* Action Footer */
-.button-group-footer {
+/* Integrated Panel Actions */
+.panel-actions {
   display: flex;
-  gap: 20px;
-  padding: 30px 50px;
-  background: rgba(0, 0, 0, 0.2);
-  width: 100%;
-  max-width: 1200px;
-  margin-top: 30px;
-  border-radius: 30px;
+  gap: 15px;
+  margin-top: auto;
+  padding-top: 30px;
 }
 
 .main-action-btn, .secondary-btn {
-  padding: 20px 40px;
-  border-radius: 18px;
-  font-weight: 800;
+  padding: 16px 24px;
+  border-radius: 12px;
+  font-weight: 700;
   cursor: pointer;
   border: none;
   transition: 0.3s;
+  font-size: 0.9rem;
+}
+
+.main-action-btn {
+  flex: 2;
+  background: var(--accent-gradient);
+  color: white;
+}
+
+.main-action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 210, 255, 0.3);
+}
+
+.secondary-btn {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+  border: 1px solid var(--glass-border);
+}
+
+.secondary-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .main-action-btn {

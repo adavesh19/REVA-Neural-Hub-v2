@@ -170,6 +170,14 @@ function App() {
                 {loading ? <div className="loader">Analyzing Neural Patterns...</div> :
                   <p>{result?.translated?.[0] || 'Translation result will appear here...'}</p>}
               </div>
+              
+              <div className="panel-actions">
+                <button className="secondary-btn" onClick={handleReset}>RESET</button>
+                <button className="main-action-btn" onClick={handleTranslate} disabled={loading}>
+                  {loading ? 'PROCESSING...' : 'TRANSLATE NOW'}
+                </button>
+              </div>
+
               {result && <div className="detected-hint">Detected: <span className="blue-gradient">{result.source_lang?.toUpperCase()}</span></div>}
             </div>
           </div>
@@ -229,14 +237,6 @@ function App() {
           </div>
         )}
 
-        {activeTab === 'translator' && (
-          <div className="button-group-footer glass-panel" style={{ marginTop: '30px', borderRadius: '30px' }}>
-            <button className="secondary-btn" onClick={handleReset}>RESET</button>
-            <button className="main-action-btn" onClick={handleTranslate} disabled={loading}>
-              {loading ? 'PROCESSING...' : 'TRANSLATE NOW'}
-            </button>
-          </div>
-        )}
 
         {history.length > 0 && activeTab === 'translator' && (
           <div className="history-section">
