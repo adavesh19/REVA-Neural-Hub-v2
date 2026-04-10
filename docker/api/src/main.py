@@ -6,9 +6,10 @@ import joblib
 import langid
 import time
 import traceback
-from googletrans import Translator
 from deep_translator import GoogleTranslator
 from langdetect import detect as lang_detect
+
+import requests
 
 app = FastAPI()
 
@@ -23,8 +24,6 @@ class TranslationRequest(BaseModel):
     text: Union[str, List[str]]
     target_lang: str
     source_lang: Optional[str] = "auto"
-
-translator_api = Translator()
 
 # TIER 1: Expert Priority Dictionary (100% Accuracy for common keywords)
 PRIORITY_DICT = {
@@ -54,17 +53,20 @@ def detect_language_custom(text: str):
         print(f"LID [Tier 1 - Dictionary]: '{text}' -> {detected}")
         return detected
 
-    # --- TIER 2: Google Translate API (The Truth) ---
-    try:
-        detection = translator_api.detect(text)
-        detected = detection.lang
-        if isinstance(detected, list): detected = detected[0]
-        print(f"LID [Tier 2 - Google API]: '{text}' -> {detected}")
-        return detected
-    except Exception as e:
-        print(f"LID Tier 2 Error: {e}")
+import requests
 
-    # --- TIER 3: Langid (Robust Offline) ---
+# TIER 2: Official Google Detection API (The Gold Standard)
+    try:
+        url = f"https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=en&dt=t&q={requests.utils.quote(text)}"
+        r = requests.get(url, timeout=5)
+        if r.status_code == 200:
+            detected = r.json()[2]
+            print(f"LID [Tier 2 - Google API]: '{text}' -> {detected}")
+            return detected
+    except Exception as e:
+        print(f"LID Tier 2 (Google API) Error: {e}")
+
+    # TIER 3: Langid (Robust Backup)
     try:
         detected, confidence = langid.classify(text)
         print(f"LID [Tier 3 - Langid]: '{text}' -> {detected}")
