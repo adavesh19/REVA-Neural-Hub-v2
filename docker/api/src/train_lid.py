@@ -9,25 +9,28 @@ import os
 data = [
     # English (en)
     ("Hello how are you", "en"), ("The weather is nice", "en"), ("I love programming", "en"),
-    ("MOM", "en"), ("Mother", "en"), ("What is your name", "en"), ("Good morning", "en"),
+    ("MOM", "en"), ("Mother", "en"), ("FATHER", "en"), ("Dad", "en"), ("Brother", "en"),
+    ("Sister", "en"), ("Family", "en"), ("What is your name", "en"), ("Good morning", "en"),
     ("The quick brown fox", "en"), ("Artificial intelligence", "en"), ("Engineering student", "en"),
+    ("How do I get there", "en"), ("This is a beautiful day", "en"), ("Can you help me", "en"),
+    ("father", "en"), ("mother", "en"), ("mom", "en"), ("dad", "en"),
     
     # Hindi (hi)
     ("नमस्ते आप कैसे हैं", "hi"), ("आपका नाम क्या है", "hi"), ("मुझे भारत पसंद है", "hi"),
     ("namaste", "hi"), ("kaise ho", "hi"), ("shukriya", "hi"), ("mera naam", "hi"),
-    ("dhanyavad", "hi"), ("khaana khaaya", "hi"), ("hindustaan", "hi"),
+    ("dhanyavad", "hi"), ("khaana khaaya", "hi"), ("hindustaan", "hi"), ("pita ji", "hi"), ("maa", "hi"),
     
     # Kannada (kn) - High priority for 'amma' and 'namaskara'
     ("ನಮಸ್ಕಾರ ನೀವು ಹೇಗಿದ್ದೀರಿ", "kn"), ("ನಿಮ್ಮ ಹೆಸರೇನು", "kn"), ("ನನಗೆ ಕನ್ನಡ ಇಷ್ಟ", "kn"),
     ("AMMA", "kn"), ("amma", "kn"), ("namaskara", "kn"), ("hegidira", "kn"), 
     ("ಊಟ ಆಯ್ತಾ", "kn"), ("banni", "kn"), ("kannada kalithu", "kn"), ("ella kshema na", "kn"),
     ("bhoomi", "kn"), ("shatamanotsava", "kn"), ("vidyarthi", "kn"), ("yellaru hegiddira", "kn"),
-    ("kannada nudi", "kn"), ("namaskara bandhu", "kn"),
+    ("kannada nudi", "kn"), ("namaskara bandhu", "kn"), ("appaji", "kn"), ("thande", "kn"), ("thayi", "kn"),
     
     # Tamil (ta)
     ("வணக்கம் நீங்கள் எப்படி இருக்கிறீர்கள்", "ta"), ("உங்களது பெயர் என்ன", "ta"),
     ("vanakkam", "ta"), ("eppadi irukkinga", "ta"), ("nandri", "ta"),
-    ("un peyar enna", "ta"), ("saaptaacha", "ta"), ("romba nandri", "ta"),
+    ("un peyar enna", "ta"), ("saaptaacha", "ta"), ("romba nandri", "ta"), ("appa", "ta"),
     
     # Telugu (te)
     ("నమస్కారం మీరు ఎలా ఉన్నారు", "te"), ("మీ పేరు ఏమిటి", "te"),
