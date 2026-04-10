@@ -2,24 +2,15 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Optional, Union, List
-import time
-import os
-import traceback
 import joblib
+import langid
+import time
+import traceback
+from googletrans import Translator
 from deep_translator import GoogleTranslator
 from langdetect import detect as lang_detect
 
 app = FastAPI()
-
-# Load custom LID model
-try:
-    LID_MODEL = joblib.load('lid_model.pkl')
-    LID_VECTORIZER = joblib.load('lid_vectorizer.pkl')
-    print("Custom LID model loaded successfully.")
-except Exception as e:
-    print(f"Warning: Could not load custom LID model: {e}")
-    LID_MODEL = None
-    LID_VECTORIZER = None
 
 app.add_middleware(
     CORSMiddleware,
@@ -33,17 +24,55 @@ class TranslationRequest(BaseModel):
     target_lang: str
     source_lang: Optional[str] = "auto"
 
+translator_api = Translator()
+
+# TIER 1: Expert Priority Dictionary (100% Accuracy for common keywords)
+PRIORITY_DICT = {
+    "amma": "kn",
+    "mom": "en",
+    "mother": "en",
+    "father": "en",
+    "dad": "en",
+    "appaji": "kn",
+    "thande": "kn",
+    "thayi": "kn",
+    "namaste": "hi",
+    "namaskara": "kn",
+    "vanakkam": "ta",
+    "namaskaram": "te",
+    "hello": "en",
+    "shukriya": "hi",
+    "dhanyavad": "hi"
+}
+
 def detect_language_custom(text: str):
-    if LID_MODEL and LID_VECTORIZER:
-        try:
-            # Predict using lowercase to match training
-            vec = LID_VECTORIZER.transform([text.lower()])
-            prediction = LID_MODEL.predict(vec)[0]
-            return prediction
-        except Exception as e:
-            print(f"LID prediction error: {e}")
+    clean_text = text.lower().strip()
     
-    # Fallback to legacy langdetect
+    # --- TIER 1: Match Priority Dictionary ---
+    if clean_text in PRIORITY_DICT:
+        detected = PRIORITY_DICT[clean_text]
+        print(f"LID [Tier 1 - Dictionary]: '{text}' -> {detected}")
+        return detected
+
+    # --- TIER 2: Google Translate API (The Truth) ---
+    try:
+        detection = translator_api.detect(text)
+        detected = detection.lang
+        if isinstance(detected, list): detected = detected[0]
+        print(f"LID [Tier 2 - Google API]: '{text}' -> {detected}")
+        return detected
+    except Exception as e:
+        print(f"LID Tier 2 Error: {e}")
+
+    # --- TIER 3: Langid (Robust Offline) ---
+    try:
+        detected, confidence = langid.classify(text)
+        print(f"LID [Tier 3 - Langid]: '{text}' -> {detected}")
+        return detected
+    exceptException as e:
+        print(f"LID Tier 3 Error: {e}")
+
+    # Final Fallback
     try:
         return lang_detect(text)
     except:
