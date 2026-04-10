@@ -142,6 +142,7 @@ function App() {
           <div className="glass-panel translator-grid">
             <div className="input-section">
               <div className="section-header">
+                <h3>Neural Source</h3>
                 <select className="lang-select" value={sourceLang} onChange={(e) => setSourceLang(e.target.value)}>
                   {LANGUAGES.map(lang => <option key={lang.code} value={lang.code}>{lang.name}</option>)}
                 </select>
@@ -158,15 +159,12 @@ function App() {
 
             <div className="output-section">
               <div className="section-header">
+                <h3>Neural Output</h3>
                 <select className="lang-select" value={targetLang} onChange={(e) => setTargetLang(e.target.value)}>
                   {LANGUAGES.filter(l => l.code !== 'auto').map(lang => (
                     <option key={lang.code} value={lang.code}>{lang.name}</option>
                   ))}
                 </select>
-                <div className="output-actions">
-                  {result && <button className="copy-btn" onClick={() => copyToClipboard(result.translated[0])}>📋</button>}
-                  {result && <button className="copy-btn" onClick={() => speakText(result.translated[0], targetLang)}>🔊</button>}
-                </div>
               </div>
               <div className="translation-box">
                 {loading ? <div className="loader">Analyzing Neural Patterns...</div> :
