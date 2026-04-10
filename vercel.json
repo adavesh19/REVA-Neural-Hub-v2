@@ -1,0 +1,10 @@
+{
+  "buildCommand": "npm run build --prefix language-hub",
+  "outputDirectory": "language-hub/dist",
+  "ignore": [
+    "docker",
+    "easynmt",
+    "models",
+    "examples"
+  ]
+}
