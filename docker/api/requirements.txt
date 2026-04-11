@@ -7,3 +7,6 @@ python-multipart
 pydantic
 langdetect
 requests
+anthropic
+python-dotenv
+google-cloud-translate

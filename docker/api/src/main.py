@@ -6,8 +6,13 @@ import langid
 import time
 import traceback
 import requests
-from deep_translator import GoogleTranslator
+from deep_translator import GoogleTranslator, MyMemoryTranslator
 from langdetect import detect as lang_detect
+import os
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 app = FastAPI()
 
@@ -76,6 +81,22 @@ def detect_language_custom(text: str):
     except:
         return "unknown"
 
+def translate_free(text: str, target_lang: str, source_lang: str):
+    """Attempt free translation using available scrapers/APIs"""
+    # 1. First choice: Google Search Scraper (Fastest)
+    try:
+        return GoogleTranslator(source=source_lang, target=target_lang).translate(text), "Google-Free"
+    except Exception as e:
+        print(f"Google Free failed: {e}")
+    
+    # 2. Second choice: MyMemory API (Reliable fallback)
+    try:
+        return MyMemoryTranslator(source=source_lang, target=target_lang).translate(text), "MyMemory-Free"
+    except Exception as e:
+        print(f"MyMemory failed: {e}")
+        
+    raise ValueError("All free translation engines are currently unavailable.")
+
 @app.get("/translate")
 async def translate(text: str, target_lang: str, source_lang: Optional[str] = "auto"):
     start_time = time.time()
@@ -87,12 +108,14 @@ async def translate(text: str, target_lang: str, source_lang: Optional[str] = "a
             detected = detect_language_custom(text)
             src = detected
             
-        translated = GoogleTranslator(source=src, target=target_lang).translate(text)
+        # Use Free Engine
+        translated, engine = translate_free(text, target_lang, src)
         
         return {
             "target_lang": target_lang,
             "source_lang": detected,
             "translated": [translated],
+            "engine": engine,
             "translation_time": time.time() - start_time
         }
     except Exception as e:
@@ -136,6 +159,15 @@ async def language_detection(text: str):
 async def get_languages():
     return ["en", "hi", "kn", "ta", "te", "ml", "gu", "pa"]
 
+@app.get("/health")
+async def health_check():
+    return {
+        "status": "online",
+        "api_mode": "free",
+        "engines": ["Google-Free", "MyMemory"],
+        "model": "Neural Hub v3 (Free Edition)"
+    }
+
 @app.get("/model_name")
 async def model_name():
-    return "Neural Hub Custom LID (High Accuracy)"
+    return "Neural Hub v3 Custom Engine"
